@@ -8,6 +8,7 @@ import {
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
+import { CredentialsDto } from 'src/auth/credentials.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -31,16 +32,27 @@ export class UserRepository extends Repository<User> {
       await user.save();
       delete user.password;
       delete user.salt;
-      delete user.confirmationToken;
       return user;
     } catch (error) {
       if (error.code.toString() === '23505') {
-        throw new ConflictException('Endereço de email já está sendo usado.');
+        throw new ConflictException('Endereço de email já está em uso');
       } else {
         throw new InternalServerErrorException(
-          'Erro ao salvar o usuario no banco de dados',
+          'Erro ao salvar o usuário no banco de dados',
         );
       }
+    }
+  }
+
+  async checkCredentials(credentialsDto: CredentialsDto): Promise<User> {
+    const { email, password } = credentialsDto;
+
+    const user = await this.findOne({ email, status: true });
+
+    if (user && (await user.checkPassword(password))) {
+      return user;
+    } else {
+      return null;
     }
   }
 
