@@ -2,7 +2,6 @@ import {
   utilities as nestWinstonModuleUtilities,
   WinstonModuleOptions,
 } from 'nest-winston';
-import { format } from 'path/posix';
 import * as winston from 'winston';
 
 export const winstonConfig: WinstonModuleOptions = {
