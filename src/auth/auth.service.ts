@@ -1,7 +1,7 @@
 import {
   Injectable,
-  UnauthorizedException,
   UnprocessableEntityException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserRepository } from 'src/users/users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -30,16 +30,14 @@ export class AuthService {
   async signIn(credentialsDto: CredentialsDto) {
     const user = await this.userRepository.checkCredentials(credentialsDto);
 
-    if (user == null) {
+    if (user === null) {
       throw new UnauthorizedException('Credenciais inválidas');
     }
 
     const jwtPayload = {
       id: user.id,
     };
-
     const token = await this.jwtService.sign(jwtPayload);
-
     return { token };
   }
 }
