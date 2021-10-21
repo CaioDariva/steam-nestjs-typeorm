@@ -15,6 +15,7 @@ import { CredentialsDto } from './credentials.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '../users/user.entity';
 import { GetUser } from './get-user.decorator';
+import { ChangePasswordDto } from './change-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -50,6 +51,17 @@ export class AuthController {
     await this.authService.sendRecoverPasswordEmail(email);
     return {
       message: 'Foi enviado um email com isntruções para restaurar a senha',
+    };
+  }
+
+  @Patch('/reset-password/:token')
+  async resetPassword(
+    @Param('token') token: string,
+    @Body(ValidationPipe) changePasswordDto: ChangePasswordDto,
+  ): Promise<{ message: string }> {
+    await this.authService.resetPassword(token, changePasswordDto);
+    return {
+      message: 'Senha alterada com sucesso',
     };
   }
 
