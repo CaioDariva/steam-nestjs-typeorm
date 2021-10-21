@@ -43,6 +43,16 @@ export class AuthController {
     return { message: 'Email confirmado.' };
   }
 
+  @Post(':send-recover-email')
+  async sendReoverPasswordEmail(
+    @Body('email') email: string,
+  ): Promise<{ message: string }> {
+    await this.authService.sendRecoverPasswordEmail(email);
+    return {
+      message: 'Foi enviado um email com isntruções para restaurar a senha',
+    };
+  }
+
   @Get('/me')
   @UseGuards(AuthGuard())
   getMe(@GetUser() user: User): User {
