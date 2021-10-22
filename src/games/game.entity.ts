@@ -1,3 +1,4 @@
+import { User } from 'src/users/user.entity';
 import {
   BaseEntity,
   Entity,
@@ -6,6 +7,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
 } from 'typeorm';
 
 @Entity()
@@ -28,4 +30,7 @@ export class Game extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToMany(() => User, (user) => user.games)
+  users: User[];
 }
