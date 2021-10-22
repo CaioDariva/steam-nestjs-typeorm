@@ -45,7 +45,6 @@ export class UsersService {
     user.name = name ? name : user.name;
     user.email = email ? email : user.email;
     user.role = role ? role : user.role;
-    // verificar status
     user.status = status ? status : user.status;
 
     try {
